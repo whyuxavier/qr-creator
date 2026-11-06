@@ -35,7 +35,21 @@
     "author": { "@type": "Person", "name": "Олександр Мрочко", "url": "https://github.com/whyuxavier" }
   }
   </script>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23090b12'/%3E%3Cpath d='M14 14h27v27H14zM59 14h27v27H59zM14 59h27v27H14z' fill='none' stroke='%238b5cf6' stroke-width='8'/%3E%3Cpath d='M59 59h10v10H59zM76 59h10v10H76zM59 76h10v10H59zM76 76h10v10H76z' fill='%238b5cf6'/%3E%3C/svg%3E">
+  <script>
+    // Різдвяна тема: грудень і січень. Для перевірки: ?xmas=1 (увімкнути) або ?xmas=0 (вимкнути)
+    (function () {
+      var q = new URLSearchParams(location.search).get('xmas');
+      var m = new Date().getMonth();
+      if (q === '1' || (q !== '0' && (m === 11 || m === 0))) {
+        document.documentElement.classList.add('xmas');
+        document.addEventListener('DOMContentLoaded', function () {
+          var icon = document.querySelector('link[rel="icon"]');
+          if (icon && icon.dataset.xmas) icon.href = icon.dataset.xmas;
+        });
+      }
+    })();
+  </script>
+  <link rel="icon" data-xmas="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23090b12'/%3E%3Cpath d='M14 14h27v27H14zM59 59h10v10H59zM76 59h10v10H76zM59 76h10v10H59zM76 76h10v10H76zM14 59h27v27H14z' fill='none' stroke='%238b5cf6' stroke-width='8'/%3E%3Cpath d='M59 59h10v10H59zM76 59h10v10H76zM59 76h10v10H59zM76 76h10v10H76z' fill='%238b5cf6'/%3E%3Cpath d='M52 46 Q60 12 80 8 Q94 6 96 24 Q88 18 82 20 Q76 28 80 46Z' fill='%23d42f3f'/%3E%3Ccircle cx='95' cy='26' r='5' fill='%23fff'/%3E%3Crect x='48' y='42' width='38' height='11' rx='5.5' fill='%23fff'/%3E%3C/svg%3E" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23090b12'/%3E%3Cpath d='M14 14h27v27H14zM59 14h27v27H59zM14 59h27v27H14z' fill='none' stroke='%238b5cf6' stroke-width='8'/%3E%3Cpath d='M59 59h10v10H59zM76 59h10v10H76zM59 76h10v10H59zM76 76h10v10H76z' fill='%238b5cf6'/%3E%3C/svg%3E">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root {
@@ -68,11 +82,11 @@
     }
     .info-button:hover { color: var(--text); border-color: var(--accent); background: #151321; }
     main {
-      width: min(100% - 32px, 520px); margin: 0 auto; padding: clamp(44px, 10vh, 100px) 0 56px;
-      flex: 1; display: flex; flex-direction: column; align-items: center;
+      width: min(100% - 32px, 1000px); margin: 0 auto; padding: clamp(16px, 6vh, 64px) 0 40px;
+      flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: clamp(32px, 6vw, 80px); align-items: center;
     }
-    .subtitle { margin: -22px 0 30px; text-align: center; color: var(--muted); font-size: 15px; line-height: 1.5; }
-    h1 { margin: 0 0 34px; text-align: center; font-size: clamp(29px, 6vw, 40px); line-height: 1.15; font-weight: 700; letter-spacing: -1.3px; }
+    h1 { margin: 0 0 12px; font-size: clamp(30px, 5vw, 46px); line-height: 1.1; font-weight: 700; letter-spacing: -1.4px; }
+    .subtitle { margin: 0 0 30px; color: var(--muted); font-size: 16px; line-height: 1.5; }
     .generator { width: 100%; }
     .url-input {
       display: block; width: 100%; height: 56px; padding: 0 17px; outline: none;
@@ -88,23 +102,43 @@
     }
     .generate-button:hover { background: var(--accent-hover); }
     .generate-button:active { transform: scale(.99); }
-    .error { color: #ff8295; font-size: 13px; margin: 11px 2px 0; }
-    .result { display: none; width: 100%; margin-top: 30px; text-align: center; }
+    .error { color: #ff8295; font-size: 13px; margin: 11px 2px 0; min-height: 1em; }
+    .result {
+      width: 100%; padding: 22px; border: 1px solid var(--border); border-radius: 20px;
+      background: var(--surface); display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
     .qr-card {
-      display: inline-flex; max-width: 100%; padding: 14px; background: #fff;
-      border-radius: 16px; box-shadow: 0 8px 38px #0005;
+      display: flex; align-items: center; justify-content: center; padding: 14px; background: #fff;
+      border-radius: 14px; box-shadow: 0 8px 38px #0005;
     }
-    #qrcode { display: flex; align-items: center; justify-content: center; }
-    #qrcode img, #qrcode canvas { display: block; max-width: 100%; height: auto; }
-    .result-url { margin: 15px auto 0; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; line-height: 1.5; }
-    .actions { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+    .result .qr-card { width: 100%; aspect-ratio: 1; }
+    #qrcode { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    #qrcode img, #qrcode canvas { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+    .result.empty .qr-card { background: transparent; box-shadow: none; border: 2px dashed var(--border); }
+    .placeholder { display: none; width: 34%; color: #3a4153; }
+    .result.empty .placeholder { display: block; }
+    .result-url { margin: 0; width: 100%; color: var(--muted); font-size: 13px; text-align: center; overflow-wrap: anywhere; line-height: 1.4; min-height: 1.4em; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
     .action-button {
-      min-height: 44px; padding: 0 17px; display: inline-flex; justify-content: center; align-items: center; gap: 8px;
-      border: 1px solid var(--border); border-radius: 10px; background: var(--surface);
-      color: var(--text); cursor: pointer; font-size: 13px; font-weight: 600; transition: background .2s, border-color .2s;
+      min-height: 46px; padding: 0 12px; display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+      border: 1px solid var(--border); border-radius: 11px; background: var(--surface-hover);
+      color: var(--text); cursor: pointer; font-size: 14px; font-weight: 600; transition: background .2s, border-color .2s, opacity .2s;
     }
-    .action-button:hover { background: var(--surface-hover); border-color: #555d72; }
-    .action-button svg { width: 17px; height: 17px; }
+    .action-button:hover:not(:disabled) { background: #20263a; border-color: #555d72; }
+    .action-button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .action-button.primary:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .action-button:disabled { opacity: .35; cursor: default; }
+    .action-button svg { width: 18px; height: 18px; flex: none; }
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; gap: 22px; align-items: start; text-align: center; width: min(100% - 32px, 480px); }
+      .result { padding: 16px; }
+      .result.empty { display: none; }
+      .result .qr-card { width: min(100%, 300px); }
+    }
+    @media (max-width: 400px) {
+      .action-button { font-size: 13px; padding: 0 8px; gap: 6px; white-space: nowrap; }
+      .action-button svg { width: 16px; height: 16px; }
+    }
     .modal-backdrop {
       position: fixed; inset: 0; z-index: 10; display: none; align-items: center; justify-content: center;
       padding: 20px; background: #0009; backdrop-filter: blur(7px);
@@ -123,74 +157,117 @@
     .github-link:hover { color: white; text-decoration: underline; }
     .github-link svg { width: 19px; height: 19px; }
     .fullscreen {
-      position: fixed; z-index: 20; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center;
+      position: fixed; z-index: 20; inset: 0; display: none;
       padding: 24px; background: #090b12;
     }
-    .fullscreen.open { display: flex; }
+    .fullscreen.open { display: block; }
+    .fullscreen-body {
+      width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3vh;
+    }
     .fullscreen.open .fullscreen-body { animation: fsIn .35s ease-out both; }
     @keyframes fsIn { from { opacity: 0; transform: scale(.97); } }
-    .fullscreen-close { transition: opacity .4s; }
-    .fullscreen.idle { cursor: none; }
-    .fullscreen.idle .fullscreen-close { opacity: 0; pointer-events: none; }
     @media (prefers-reduced-motion: reduce) { .fullscreen.open .fullscreen-body { animation: none; } }
-    .fullscreen-body { display: flex; align-items: center; justify-content: center; gap: clamp(24px, 5vw, 72px); width: 100%; height: 100%; }
-    .fullscreen .qr-card { padding: 18px; flex: none; }
-    #fullscreenQr { width: min(78vh, 52vw); height: min(78vh, 52vw); display: flex; align-items: center; justify-content: center; }
-    .fs-address {
-      flex: 1; min-width: 0; max-width: 40vw; height: min(78vh, 52vw); display: flex; align-items: center;
-      padding-left: clamp(24px, 4vw, 56px); border-left: 1px solid var(--border);
-    }
+    .fullscreen .qr-card { padding: 2.2vh; flex: none; }
+    #fullscreenQr { width: min(86vw, 64vh); height: min(86vw, 64vh); }
+    #fullscreenQr img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+    .fs-address { width: min(94vw, 1400px); height: 22vh; flex: none; display: flex; align-items: flex-start; justify-content: center; }
     .fs-url {
-      width: 100%; margin: 0; color: var(--text);
+      max-width: 100%; margin: 0; color: var(--text); text-align: center;
       font-family: ui-monospace, "Cascadia Mono", Consolas, "Roboto Mono", Menlo, monospace;
-      font-weight: 700; line-height: 1.25; letter-spacing: .01em; overflow-wrap: normal; word-break: normal;
+      font-weight: 700; line-height: 1.2; overflow-wrap: normal; word-break: normal;
     }
     .fs-url .host { color: #c7b4ff; }
     .fs-url.tight { overflow-wrap: anywhere; }
-    @media (orientation: portrait), (max-width: 760px) {
-      .fullscreen-body { flex-direction: column; gap: 22px; }
-      #fullscreenQr { width: min(80vw, 50vh); height: min(80vw, 50vh); }
-      .fs-address { max-width: 92vw; width: 92vw; height: 28vh; flex: none; padding: 18px 0 0; border-left: 0; border-top: 1px solid var(--border); align-items: flex-start; }
-      .fs-url { text-align: center; }
-    }
-    #fullscreenQr img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
     .fullscreen-close {
-      position: absolute; top: 22px; right: 22px; width: 42px; height: 42px; border: 1px solid var(--border);
-      border-radius: 11px; background: var(--surface); color: var(--text); font-size: 24px; cursor: pointer;
+      position: fixed; z-index: 5; top: 18px; right: 18px; width: 46px; height: 46px; display: grid; place-items: center;
+      border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text);
+      font-size: 26px; line-height: 1; cursor: pointer; opacity: .7; transition: opacity .2s, background .2s;
     }
-    @media (max-width: 480px) {
-      .topbar { padding: 16px 18px; }
-      main { padding-top: 52px; }
-      h1 { margin-bottom: 27px; }
-      .actions { flex-direction: column; }
-      .action-button { width: 100%; }
-      .qr-card { padding: 10px; }
+    .fullscreen-close:hover, .fullscreen-close:focus-visible { opacity: 1; background: var(--surface-hover); }
+
+    /* ===== Різдвяна тема (грудень–січень) ===== */
+    .snow-canvas, .santa-flight { display: none; }
+    .xmas .snow-canvas { display: block; position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .xmas .topbar, .xmas main { position: relative; z-index: 1; }
+    .xmas body {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 115%, #1a2140 0%, transparent 70%),
+        var(--bg);
+    }
+    /* Кучугури на кнопках — поступово «насипаються» */
+    .xmas .generate-button, .xmas .action-button, .xmas .info-button { position: relative; overflow: visible; }
+    .xmas .generate-button::before, .xmas .action-button::before, .xmas .info-button::before {
+      content: ""; position: absolute; left: -3px; right: -3px; top: -9px; height: 17px; pointer-events: none;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 24' preserveAspectRatio='none'%3E%3Cpath d='M0 24V15Q6 8 16 11Q26 3 40 8Q52 1 66 7Q80 0 96 6Q112 -1 128 6Q142 1 156 8Q170 2 182 9Q194 7 200 14V24Z' fill='%23f4f7ff'/%3E%3Cpath d='M0 24V20Q50 16 100 19Q150 16 200 20V24Z' fill='%23dfe5f7'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat;
+      filter: drop-shadow(0 2px 2px #0006);
+      transform-origin: 50% 100%; animation: driftGrow 40s cubic-bezier(.2,.7,.3,1) both;
+    }
+    .xmas .action-button::before { top: -7px; height: 13px; animation-delay: 4s; }
+    .xmas .info-button::before { left: 5px; right: 5px; top: -5px; height: 10px; animation-delay: 8s; }
+    @keyframes driftGrow { from { transform: scaleY(.12); opacity: .6; } to { transform: scaleY(1); opacity: 1; } }
+    /* Тінь саней Санти — пролітає дуже рідко */
+    .xmas .santa-flight {
+      display: block; position: fixed; z-index: 0; left: 0; top: 0; width: clamp(180px, 24vw, 340px);
+      color: #b9c4ea; opacity: 0; pointer-events: none; filter: blur(.6px);
+    }
+    .santa-flight svg { display: block; width: 100%; height: auto; }
+    @media (prefers-reduced-motion: reduce) {
+      .xmas .generate-button::before, .xmas .action-button::before, .xmas .info-button::before { animation: none; }
+      .xmas .santa-flight { display: none; }
     }
   </style>
 </head>
 <body>
+  <canvas class="snow-canvas" id="snowCanvas" aria-hidden="true"></canvas>
+  <div class="santa-flight" id="santaFlight" aria-hidden="true">
+    <svg viewBox="0 0 300 80" fill="currentColor">
+      <path d="M66 46 Q92 52 104 50 M66 46 Q122 46 150 40 M66 46 Q150 40 196 30" stroke="currentColor" stroke-width="1.2" fill="none"/>
+      <path d="M10 50 Q6 34 16 32 L60 37 Q70 38 68 50 Z"/>
+      <path d="M2 60 H64 Q74 60 74 52" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M18 50 L15 60 M56 50 L58 60" stroke="currentColor" stroke-width="2.4"/>
+      <circle cx="24" cy="28" r="10"/>
+      <ellipse cx="44" cy="30" rx="9" ry="9"/>
+      <circle cx="47" cy="18" r="5"/>
+      <path d="M42 15 Q48 4 58 9 L60 13 Q52 10 50 15 Z"/>
+      <g transform="translate(104 30)"><g id="deer">
+        <ellipse cx="18" cy="18" rx="12" ry="5.5"/>
+        <path d="M25 15 L32 7 L36 9 L30 19 Z"/>
+        <ellipse cx="36" cy="8" rx="5" ry="2.8" transform="rotate(18 36 8)"/>
+        <path d="M33 6 L30 -1 M31 2 L27 1 M35 5 L38 -1 M36.5 2 L40 1" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path d="M26 21 L34 25 M23 22 L30 29 M11 21 L2 24 M13 22 L5 29" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M6 16 L2 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </g></g>
+      <use href="#deer" transform="translate(150 20)"/>
+      <use href="#deer" transform="translate(196 12)"/>
+    </svg>
+  </div>
   <header class="topbar">
     <button class="info-button" id="infoButton" type="button" aria-label="Інформація про сайт" title="Про сайт">i</button>
   </header>
 
   <main>
-    <h1>Генератор QR-кодів</h1>
-    <p class="subtitle">Створіть QR-код та покажіть на увесь екран або завантажте</p>
-    <form class="generator" id="qrForm" novalidate>
-      <input class="url-input" id="urlInput" type="url" inputmode="url" autocomplete="url" placeholder="Вставте посилання (https://...)" aria-label="Посилання для QR-коду">
-      <button class="generate-button" type="submit">Згенерувати</button>
-      <p class="error" id="errorMessage" role="alert"></p>
-    </form>
+    <div class="intro">
+      <h1>Генератор QR-кодів</h1>
+      <p class="subtitle">Створіть QR-код та покажіть на увесь екран або завантажте</p>
+      <form class="generator" id="qrForm" novalidate>
+        <input class="url-input" id="urlInput" type="url" inputmode="url" autocomplete="url" placeholder="Вставте посилання (https://...)" aria-label="Посилання для QR-коду">
+        <button class="generate-button" type="submit">Згенерувати</button>
+        <p class="error" id="errorMessage" role="alert"></p>
+      </form>
+    </div>
 
-    <section class="result" id="result" aria-live="polite">
-      <div class="qr-card"><div id="qrcode" aria-label="Згенерований QR-код"></div></div>
+    <section class="result empty" id="result" aria-live="polite">
+      <div class="qr-card">
+        <svg class="placeholder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3z"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 20h2M20 14v2" stroke-linecap="round"/></svg>
+        <div id="qrcode" aria-label="Згенерований QR-код"></div>
+      </div>
       <p class="result-url" id="generatedUrl"></p>
       <div class="actions">
-        <button class="action-button" id="downloadBtn" type="button">
+        <button class="action-button" id="downloadBtn" type="button" disabled>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></svg>
-          Зберегти PNG
+          Завантажити
         </button>
-        <button class="action-button" id="fullscreenBtn" type="button">
+        <button class="action-button primary" id="fullscreenBtn" type="button" disabled>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
           На весь екран
         </button>
@@ -278,13 +355,11 @@
       const range = document.createRange();
       const fits = () => {
         range.selectNodeContents(el);
-        const r = range.getBoundingClientRect(), e = el.getBoundingClientRect();
-        const cs = getComputedStyle(el);
-        const right = e.right - parseFloat(cs.paddingRight) - parseFloat(cs.borderRightWidth);
-        return el.scrollHeight <= maxH && r.right <= right + 1;
+        const r = range.getBoundingClientRect();
+        return el.scrollHeight <= maxH && r.width <= box.clientWidth + 1;
       };
       el.classList.remove('tight');
-      let lo = 16, hi = 120;
+      let lo = 16, hi = 110;
       while (hi - lo > 1) {
         const mid = Math.floor((lo + hi) / 2);
         el.style.fontSize = mid + 'px';
@@ -315,11 +390,18 @@
         return;
       }
       qrContainer.innerHTML = '';
-      new QRCode(qrContainer, { text: url, width: 240, height: 240, colorDark: '#090b12', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+      new QRCode(qrContainer, { text: url, width: 512, height: 512, colorDark: '#090b12', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
       generatedUrl.textContent = url;
       currentUrl = url;
-      result.style.display = 'block';
-      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      result.classList.remove('empty');
+      document.getElementById('downloadBtn').disabled = false;
+      document.getElementById('fullscreenBtn').disabled = false;
+      input.blur();
+      // На телефоні результат під формою — прокручуємо так, щоб код і кнопки були повністю видно
+      requestAnimationFrame(() => {
+        const r = result.getBoundingClientRect();
+        if (r.bottom > window.innerHeight || r.top < 0) result.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      });
     });
 
     document.getElementById('downloadBtn').addEventListener('click', () => {
@@ -346,27 +428,15 @@
       fullscreenView.classList.add('open');
       document.body.style.overflow = 'hidden';
       fitUrlText();
-      wakeControls();
       // Справжній повний екран (без панелей браузера), якщо підтримується
       if (fullscreenView.requestFullscreen && !document.fullscreenElement) {
         fullscreenView.requestFullscreen().then(fitUrlText).catch(() => {});
       }
     });
 
-    // Кнопка закриття й курсор ховаються, коли мишка не рухається
-    let idleTimer;
-    function wakeControls() {
-      fullscreenView.classList.remove('idle');
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => fullscreenView.classList.add('idle'), 2500);
-    }
-    fullscreenView.addEventListener('mousemove', wakeControls);
-    fullscreenView.addEventListener('touchstart', wakeControls, { passive: true });
-
     function closeFullscreen() {
       if (!fullscreenView.classList.contains('open')) return;
-      fullscreenView.classList.remove('open', 'idle');
-      clearTimeout(idleTimer);
+      fullscreenView.classList.remove('open');
       document.body.style.overflow = '';
       if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     }
@@ -387,6 +457,78 @@
         infoModal.classList.remove('open');
       }
     });
+
+    // ===== Різдвяна тема: сніжок і тінь саней =====
+    (function () {
+      if (!document.documentElement.classList.contains('xmas')) return;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const canvas = document.getElementById('snowCanvas');
+      const ctx = canvas.getContext('2d');
+      let flakes = [], w = 0, h = 0, dpr = 1;
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = window.innerWidth; h = window.innerHeight;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const count = Math.min(140, Math.round(w * h / 11000));
+        while (flakes.length < count) flakes.push(makeFlake(true));
+        flakes.length = count;
+        if (reduce) draw();
+      }
+      function makeFlake(anywhere) {
+        const r = Math.random() * 1.9 + 0.7;
+        return {
+          x: Math.random() * w, y: anywhere ? Math.random() * h : -5,
+          r, vy: 0.25 + r * 0.22, sway: Math.random() * Math.PI * 2,
+          swaySpeed: 0.004 + Math.random() * 0.01, a: 0.35 + Math.random() * 0.5
+        };
+      }
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        for (const f of flakes) {
+          ctx.globalAlpha = f.a;
+          ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fillStyle = '#eef2ff'; ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+      function tick() {
+        if (!document.hidden) {
+          for (const f of flakes) {
+            f.sway += f.swaySpeed;
+            f.y += f.vy; f.x += Math.sin(f.sway) * 0.35;
+            if (f.y > h + 5) Object.assign(f, makeFlake(false));
+            if (f.x > w + 5) f.x = -5; else if (f.x < -5) f.x = w + 5;
+          }
+          draw();
+        }
+        requestAnimationFrame(tick);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+      if (reduce) return;
+      requestAnimationFrame(tick);
+
+      // Сани пролітають дуже рідко: перший раз через 40–90 с, далі раз на 3–6 хв
+      const santa = document.getElementById('santaFlight');
+      function fly() {
+        if (!document.hidden && !fullscreenView.classList.contains('open')) {
+          const y0 = h * (0.06 + Math.random() * 0.22);
+          const sw = santa.offsetWidth;
+          santa.animate([
+            { transform: `translate(${-sw - 20}px, ${y0}px) rotate(-4deg)`, opacity: 0 },
+            { opacity: 0.13, offset: 0.12 },
+            { transform: `translate(${w * 0.5 - sw / 2}px, ${y0 - h * 0.05}px) rotate(-6deg)`, opacity: 0.13, offset: 0.5 },
+            { opacity: 0.13, offset: 0.88 },
+            { transform: `translate(${w + 20}px, ${y0 - h * 0.12}px) rotate(-8deg)`, opacity: 0 }
+          ], { duration: 11000, easing: 'linear' });
+        }
+        setTimeout(fly, (180 + Math.random() * 180) * 1000);
+      }
+      setTimeout(fly, (40 + Math.random() * 50) * 1000);
+      window.__santaFly = fly; // для перевірки з консолі
+    })();
   </script>
 </body>
 </html>
