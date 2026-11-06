@@ -194,17 +194,6 @@
         radial-gradient(ellipse 80% 50% at 50% 115%, #1a2140 0%, transparent 70%),
         var(--bg);
     }
-    /* Кучугури на кнопках — поступово «насипаються» */
-    .xmas .generate-button, .xmas .action-button, .xmas .info-button { position: relative; overflow: visible; }
-    .xmas .generate-button::before, .xmas .action-button::before, .xmas .info-button::before {
-      content: ""; position: absolute; left: -3px; right: -3px; top: -9px; height: 17px; pointer-events: none;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 24' preserveAspectRatio='none'%3E%3Cpath d='M0 24V15Q6 8 16 11Q26 3 40 8Q52 1 66 7Q80 0 96 6Q112 -1 128 6Q142 1 156 8Q170 2 182 9Q194 7 200 14V24Z' fill='%23f4f7ff'/%3E%3Cpath d='M0 24V20Q50 16 100 19Q150 16 200 20V24Z' fill='%23dfe5f7'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat;
-      filter: drop-shadow(0 2px 2px #0006);
-      transform-origin: 50% 100%; animation: driftGrow 40s cubic-bezier(.2,.7,.3,1) both;
-    }
-    .xmas .action-button::before { top: -7px; height: 13px; animation-delay: 4s; }
-    .xmas .info-button::before { left: 5px; right: 5px; top: -5px; height: 10px; animation-delay: 8s; }
-    @keyframes driftGrow { from { transform: scaleY(.12); opacity: .6; } to { transform: scaleY(1); opacity: 1; } }
     /* Тінь саней Санти — пролітає дуже рідко */
     .xmas .santa-flight {
       display: block; position: fixed; z-index: 0; left: 0; top: 0; width: clamp(180px, 24vw, 340px);
@@ -212,7 +201,6 @@
     }
     .santa-flight svg { display: block; width: 100%; height: auto; }
     @media (prefers-reduced-motion: reduce) {
-      .xmas .generate-button::before, .xmas .action-button::before, .xmas .info-button::before { animation: none; }
       .xmas .santa-flight { display: none; }
     }
   </style>
